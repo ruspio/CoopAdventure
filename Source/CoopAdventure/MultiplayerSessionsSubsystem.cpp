@@ -18,6 +18,17 @@ UMultiplayerSessionsSubsystem::UMultiplayerSessionsSubsystem()
     //PrintString("MSS Constructor");
 }
 
+void UMultiplayerSessionsSubsystem::OnCreateSessionComplete(FName SessionName, bool WasSuccessful)
+{
+    PrintString(FString::Printf(TEXT("OnCreateSessionComplete: %d"), WasSuccessful));
+
+    if (WasSuccessful)
+    {
+        GetWorld()->ServerTravel("/Game/ThirdPerson/Maps/ThirdPersonMap?listen");
+    }
+    
+}
+
 void UMultiplayerSessionsSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
     Super::Initialize(Collection);
@@ -32,7 +43,10 @@ void UMultiplayerSessionsSubsystem::Initialize(FSubsystemCollectionBase& Collect
         SessionInterface =  OnlineSubsystem->GetSessionInterface();
         if (SessionInterface.IsValid())
         {
-            PrintString("Session Interface is valid!");
+            SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(
+                this, 
+                &UMultiplayerSessionsSubsystem::OnCreateSessionComplete
+            );
         }
     }
 }

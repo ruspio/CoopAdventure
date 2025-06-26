@@ -23,6 +23,8 @@ public:
 private:
 	IOnlineSessionPtr SessionInterface;
 
+	void OnCreateSessionComplete(FName SessionName, bool WasSuccessful);
+
 public:
 	// Begin USubsystem
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
