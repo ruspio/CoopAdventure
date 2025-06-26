@@ -20,11 +20,19 @@ class COOPADVENTURE_API UMultiplayerSessionsSubsystem : public UGameInstanceSubs
 public:
 	UMultiplayerSessionsSubsystem();
 
+private:
+	IOnlineSessionPtr SessionInterface;
+
+public:
 	// Begin USubsystem
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
+
+	UFUNCTION(BlueprintCallable)
+	void CreateServer(FString ServerName);
+	
+	UFUNCTION(BlueprintCallable)
+	void FindServer(FString ServerName);
 	// End USubsystem
 
-private:
-	IOnlineSessionPtr SessionInterface;
 };
