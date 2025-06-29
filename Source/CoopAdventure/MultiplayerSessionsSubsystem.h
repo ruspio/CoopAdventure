@@ -21,9 +21,13 @@ public:
 	UMultiplayerSessionsSubsystem();
 
 private:
+	bool CreateServerAfterDestroy;
+	FString DestroyServerName;
+
 	IOnlineSessionPtr SessionInterface;
 
 	void OnCreateSessionComplete(FName SessionName, bool WasSuccessful);
+	void OnDestroySessionComplete(FName SessionName, bool WasSuccessful);
 
 public:
 	// Begin USubsystem

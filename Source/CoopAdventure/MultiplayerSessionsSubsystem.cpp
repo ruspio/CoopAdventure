@@ -16,6 +16,8 @@ void PrintString(const FString& Str)
 UMultiplayerSessionsSubsystem::UMultiplayerSessionsSubsystem()
 {
     //PrintString("MSS Constructor");
+    CreateServerAfterDestroy = false;
+    DestroyServerName = "";
 }
 
 void UMultiplayerSessionsSubsystem::OnCreateSessionComplete(FName SessionName, bool WasSuccessful)
@@ -25,8 +27,17 @@ void UMultiplayerSessionsSubsystem::OnCreateSessionComplete(FName SessionName, b
     if (WasSuccessful)
     {
         GetWorld()->ServerTravel("/Game/ThirdPerson/Maps/ThirdPersonMap?listen");
+    }    
+}
+
+void UMultiplayerSessionsSubsystem::OnDestroySessionComplete(FName SessionName, bool WasSuccessful)
+{
+    PrintString(FString::Printf(TEXT("OnDestroySessionComplete: %d"), WasSuccessful));
+    if (CreateServerAfterDestroy)
+    {
+        CreateServerAfterDestroy = false;
+        CreateServer(DestroyServerName);
     }
-    
 }
 
 void UMultiplayerSessionsSubsystem::Initialize(FSubsystemCollectionBase& Collection)
@@ -46,6 +57,11 @@ void UMultiplayerSessionsSubsystem::Initialize(FSubsystemCollectionBase& Collect
             SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(
                 this, 
                 &UMultiplayerSessionsSubsystem::OnCreateSessionComplete
+            );
+
+            SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(
+                this, 
+                &UMultiplayerSessionsSubsystem::OnDestroySessionComplete
             );
         }
     }
@@ -69,6 +85,19 @@ void UMultiplayerSessionsSubsystem::CreateServer(FString ServerName)
     }
 
     FName MySessionName = FName("Co-op Adventure Session");
+
+    FNamedOnlineSession* ExistingSession = SessionInterface->GetNamedSession(MySessionName);
+    if (ExistingSession)
+    {
+        FString Msg = FString::Printf(
+            TEXT("Session with name %s already exists, destroying it"), *MySessionName.ToString()
+        );
+        PrintString(Msg);
+        CreateServerAfterDestroy = true;
+        DestroyServerName = ServerName;
+        SessionInterface->DestroySession(MySessionName);
+        return;
+    }
 
     FOnlineSessionSettings SessionSettings;
     SessionSettings.bAllowJoinInProgress = true;
