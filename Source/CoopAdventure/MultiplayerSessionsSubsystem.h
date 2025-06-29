@@ -6,6 +6,8 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 
 #include "Interfaces/OnlineSessionInterface.h"
+#include "OnlineSessionSettings.h"
+#include "Templates/SharedPointer.h"
 
 #include "MultiplayerSessionsSubsystem.generated.h"
 
@@ -16,7 +18,7 @@ UCLASS()
 class COOPADVENTURE_API UMultiplayerSessionsSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
-	
+
 public:
 	UMultiplayerSessionsSubsystem();
 
@@ -25,9 +27,11 @@ private:
 	FString DestroyServerName;
 
 	IOnlineSessionPtr SessionInterface;
+	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 
 	void OnCreateSessionComplete(FName SessionName, bool WasSuccessful);
 	void OnDestroySessionComplete(FName SessionName, bool WasSuccessful);
+	void OnFindSessionsComplete(bool WasSuccessful);
 
 public:
 	// Begin USubsystem

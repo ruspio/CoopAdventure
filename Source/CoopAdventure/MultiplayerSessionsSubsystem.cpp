@@ -3,7 +3,7 @@
 
 #include "MultiplayerSessionsSubsystem.h"
 #include "OnlineSubsystem.h"
-#include "OnlineSessionSettings.h"
+#include "Online/OnlineSessionNames.h"
 
 void PrintString(const FString& Str)
 {
@@ -40,6 +40,20 @@ void UMultiplayerSessionsSubsystem::OnDestroySessionComplete(FName SessionName, 
     }
 }
 
+void UMultiplayerSessionsSubsystem::OnFindSessionsComplete(bool WasSuccessful)
+{
+    if (!WasSuccessful) return;
+    
+    TArray<FOnlineSessionSearchResult> Results = SessionSearch->SearchResults;
+    if (Results.Num() > 0)
+    {
+        FString Msg = FString::Printf(TEXT("%d sessions found"), Results.Num());
+        PrintString(Msg);
+    } else {
+        PrintString("Zero sessions found.");
+    }
+}
+
 void UMultiplayerSessionsSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
     Super::Initialize(Collection);
@@ -62,6 +76,11 @@ void UMultiplayerSessionsSubsystem::Initialize(FSubsystemCollectionBase& Collect
             SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(
                 this, 
                 &UMultiplayerSessionsSubsystem::OnDestroySessionComplete
+            );
+
+            SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(
+                this, 
+                &UMultiplayerSessionsSubsystem::OnFindSessionsComplete
             );
         }
     }
@@ -122,4 +141,24 @@ void UMultiplayerSessionsSubsystem::CreateServer(FString ServerName)
 void UMultiplayerSessionsSubsystem::FindServer(FString ServerName)
 {
     PrintString("FindServer Function");
+
+    if (ServerName.IsEmpty())
+    {
+        PrintString("Server name cannot be empty!");
+        return;
+    }
+    
+    SessionSearch = MakeShareable(new FOnlineSessionSearch());
+    
+    bool IsLAN = false;
+    if (IOnlineSubsystem::Get()->GetSubsystemName() == "NULL")
+    {
+        IsLAN = true;
+    } 
+
+    SessionSearch->bIsLanQuery = IsLAN;
+    SessionSearch->MaxSearchResults = 9999;
+    SessionSearch->QuerySettings.Set(FName(TEXT("SEARCH_PRESENCE")), true, EOnlineComparisonOp::Equals);
+
+    SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 }
