@@ -18,6 +18,7 @@ UMultiplayerSessionsSubsystem::UMultiplayerSessionsSubsystem()
     //PrintString("MSS Constructor");
     CreateServerAfterDestroy = false;
     DestroyServerName = "";
+    ServerNameToFind = "";
 }
 
 void UMultiplayerSessionsSubsystem::OnCreateSessionComplete(FName SessionName, bool WasSuccessful)
@@ -43,12 +44,28 @@ void UMultiplayerSessionsSubsystem::OnDestroySessionComplete(FName SessionName, 
 void UMultiplayerSessionsSubsystem::OnFindSessionsComplete(bool WasSuccessful)
 {
     if (!WasSuccessful) return;
+    if (ServerNameToFind.IsEmpty()) return;
+    
     
     TArray<FOnlineSessionSearchResult> Results = SessionSearch->SearchResults;
     if (Results.Num() > 0)
     {
         FString Msg = FString::Printf(TEXT("%d sessions found"), Results.Num());
         PrintString(Msg);
+
+        for (FOnlineSessionSearchResult Result : Results)
+        {
+            if (Result.IsValid())
+            {
+                FString ServerName = "No-name";
+                Result.Session.SessionSettings.Get(FName("SERVER_NAME"), ServerName);
+
+                FString Msg2 = FString::Printf(TEXT("ServerName: %s"), *ServerName);
+                PrintString(Msg2);
+            }            
+        }
+        
+
     } else {
         PrintString("Zero sessions found.");
     }
@@ -134,6 +151,12 @@ void UMultiplayerSessionsSubsystem::CreateServer(FString ServerName)
     }    
     SessionSettings.bIsLANMatch = IsLAN;
 
+    SessionSettings.Set(
+        FName("SERVER_NAME"), 
+        ServerName, 
+        EOnlineDataAdvertisementType::ViaOnlineServiceAndPing
+    );
+
     SessionInterface->CreateSession(0, MySessionName, SessionSettings);
     
 }
@@ -159,6 +182,8 @@ void UMultiplayerSessionsSubsystem::FindServer(FString ServerName)
     SessionSearch->bIsLanQuery = IsLAN;
     SessionSearch->MaxSearchResults = 9999;
     SessionSearch->QuerySettings.Set(FName(TEXT("SEARCH_PRESENCE")), true, EOnlineComparisonOp::Equals);
+
+    ServerNameToFind = ServerName;
 
     SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 }

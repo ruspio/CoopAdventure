@@ -25,6 +25,7 @@ public:
 private:
 	bool CreateServerAfterDestroy;
 	FString DestroyServerName;
+	FString ServerNameToFind;
 
 	IOnlineSessionPtr SessionInterface;
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
