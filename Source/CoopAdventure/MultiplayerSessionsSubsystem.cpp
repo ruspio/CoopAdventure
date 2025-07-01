@@ -79,8 +79,6 @@ void UMultiplayerSessionsSubsystem::OnFindSessionsComplete(bool WasSuccessful)
             PrintString(FString::Printf(TEXT("Couldn't find server: %s"), *ServerNameToFind));
             ServerNameToFind = "";
         }
-                
-
     } else {
         PrintString("Zero sessions found.");
     }
@@ -88,7 +86,28 @@ void UMultiplayerSessionsSubsystem::OnFindSessionsComplete(bool WasSuccessful)
 
 void UMultiplayerSessionsSubsystem::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
 {
-    
+    if (Result == EOnJoinSessionCompleteResult::Success)
+    {
+        FString Msg = FString::Printf(TEXT("Successfully joined session %s"), *SessionName.ToString());
+        PrintString(Msg);
+
+        FString Address = "";
+        bool Success = SessionInterface->GetResolvedConnectString(MySessionName, Address);
+        if (Success)
+        {
+            PrintString(FString::Printf(TEXT("Addres: %s"), *Address));
+            APlayerController* PlayerController = GetGameInstance()->GetFirstLocalPlayerController();
+            if (PlayerController)
+            {
+                PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
+            }
+            
+        } else {
+            PrintString("GetResolvedConnectString failed");
+        }        
+    } else {
+        PrintString("OnJoinSessionComplete failed");
+    }
 }
 
 void UMultiplayerSessionsSubsystem::Initialize(FSubsystemCollectionBase& Collection)
