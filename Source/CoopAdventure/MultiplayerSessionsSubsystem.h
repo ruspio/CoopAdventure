@@ -31,6 +31,9 @@ private:
 	FString ServerNameToFind;
 	FName MySessionName;
 
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	FString GameMapPath;
+
 	IOnlineSessionPtr SessionInterface;
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 
