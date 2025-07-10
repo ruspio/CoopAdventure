@@ -21,22 +21,20 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	UPROPERTY(EditAnywhere)
-	FVector StartPoint = FVector::ZeroVector;
-	UPROPERTY(EditAnywhere)
-	FVector EndPoint = FVector::ZeroVector;
+	FVector StartPoint;
+	FVector EndPoint;
 	
 	UPROPERTY(VisibleAnywhere)
-	bool ArePointsSet = false;
+	bool ArePointsSet;
 
 	UPROPERTY(EditAnywhere)
-	float MoveTime = 0.f;
+	float MoveTime;
 
 	UPROPERTY(EditAnywhere)
 	TArray<AActor*> TriggerActors;
 	
 	UPROPERTY(VisibleAnywhere)
-	int ActivatedTriggerCount = 0;
+	int ActivatedTriggerCount;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool AllTriggerActorsTriggered = false;
@@ -45,5 +43,8 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+	bool GetAllTriggerActorsTriggered() { return AllTriggerActorsTriggered; }
+
+	UFUNCTION()
+	void SetPoints(FVector Point1, FVector Point2);
 };

@@ -10,7 +10,14 @@ UTransporter::UTransporter()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+	SetIsReplicatedByDefault(true);
+
+	MoveTime = 3.f;
+	ActivatedTriggerCount = 0;
+	
+	ArePointsSet = false;
+	StartPoint = FVector::Zero();
+	EndPoint = FVector::Zero();
 }
 
 
@@ -30,5 +37,14 @@ void UTransporter::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+}
+
+void UTransporter::SetPoints(FVector Point1, FVector Point2)
+{
+	if (Point1.Equals(Point2)) return;
+	
+	StartPoint = Point1;
+	EndPoint = Point2;
+	ArePointsSet = true;
 }
 
