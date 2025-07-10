@@ -20,6 +20,27 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+private:
+	UPROPERTY(EditAnywhere)
+	FVector StartPoint = FVector::ZeroVector;
+	UPROPERTY(EditAnywhere)
+	FVector EndPoint = FVector::ZeroVector;
+	
+	UPROPERTY(VisibleAnywhere)
+	bool ArePointsSet = false;
+
+	UPROPERTY(EditAnywhere)
+	float MoveTime = 0.f;
+
+	UPROPERTY(EditAnywhere)
+	TArray<AActor*> TriggerActors;
+	
+	UPROPERTY(VisibleAnywhere)
+	int ActivatedTriggerCount = 0;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool AllTriggerActorsTriggered = false;
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
