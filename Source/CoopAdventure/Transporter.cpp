@@ -2,6 +2,7 @@
 
 
 #include "Transporter.h"
+#include "PressurePlate.h"
 
 // Sets default values for this component's properties
 UTransporter::UTransporter()
@@ -26,7 +27,24 @@ void UTransporter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	for (AActor* TA : TriggerActors)
+	{
+		APressurePlate* PressurePlateActor = Cast<APressurePlate>(TA);
+		if (PressurePlateActor)
+		{
+			PressurePlateActor->OnActivated.AddDynamic(this, &UTransporter::OnPressurePlateActivated);
+			PressurePlateActor->OnDeactivated.AddDynamic(this, &UTransporter::OnPressurePlateDeactivated);
+		}		
+	}	
+}
+
+void UTransporter::OnPressurePlateActivated()
+{
+	
+}
+
+void UTransporter::OnPressurePlateDeactivated()
+{
 	
 }
 

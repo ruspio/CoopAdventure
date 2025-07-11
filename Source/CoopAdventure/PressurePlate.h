@@ -51,16 +51,17 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	float MeshPressurePlateXYPosition = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	float MeshPressurePlateZPosition = 0.f;	
+	float MeshPressurePlateZPosition = 0.f;
+	
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(BlueprintAssignable)
 	FPressurePlateOnActivated OnActivated;
 	UPROPERTY(BlueprintAssignable)
 	FPressurePlateOnDeactivated OnDeactivated;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 	bool GetActivated() { return Activated; }
 	void SetActivated(bool bActivated);

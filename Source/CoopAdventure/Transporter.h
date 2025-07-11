@@ -38,6 +38,12 @@ private:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool AllTriggerActorsTriggered = false;
+	
+	UFUNCTION()
+	void OnPressurePlateActivated();
+	
+	UFUNCTION()
+	void OnPressurePlateDeactivated();
 
 public:	
 	// Called every frame
