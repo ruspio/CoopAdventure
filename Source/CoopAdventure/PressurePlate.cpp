@@ -2,6 +2,7 @@
 
 
 #include "PressurePlate.h"
+#include "Transporter.h"
 
 // Sets default values
 APressurePlate::APressurePlate()
@@ -70,6 +71,10 @@ APressurePlate::APressurePlate()
 			MeshPressurePlateZPosition
 		));
 	}
+	
+	Transporter = CreateDefaultSubobject<UTransporter>(TEXT("Transporterr"));
+	Transporter->SetMoveTime(0.25f);
+	Transporter->SetOwnerIsTriggerActor(true);
 }
 
 // Called when the game starts or when spawned
@@ -79,6 +84,10 @@ void APressurePlate::BeginPlay()
 
 	TriggerMesh->SetVisibility(false);
 	TriggerMesh->SetCollisionProfileName(FName("OverlapAll"));
+
+	FVector Point1 = GetActorLocation();
+	FVector Point2 = Point1 + FVector(0.f, 0.f, -10.f);
+	Transporter->SetPoints(Point1, Point2);
 }
 
 // Called every frame

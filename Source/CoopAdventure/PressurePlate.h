@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "PressurePlate.generated.h"
 
+class UTransporter;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPressurePlateOnActivated);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPressurePlateOnDeactivated);
 
@@ -31,6 +33,9 @@ private:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Mesh;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UTransporter* Transporter;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool Activated;

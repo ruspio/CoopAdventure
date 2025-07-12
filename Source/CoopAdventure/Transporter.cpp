@@ -27,6 +27,11 @@ void UTransporter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (OwnerIsTriggerActor)
+	{
+		TriggerActors.Add(GetOwner());
+	}	
+
 	for (AActor* TA : TriggerActors)
 	{
 		APressurePlate* PressurePlateActor = Cast<APressurePlate>(TA);
@@ -62,10 +67,6 @@ void UTransporter::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 	if (TriggerActors.Num() > 0)
 	{
 		AllTriggerActorsTriggered = ActivatedTriggerCount >= TriggerActors.Num();
-		if (AllTriggerActorsTriggered)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, FString("AllTriggerActorsTiggered!"));
-		}
 	}
 
 	AActor* MyOwner = GetOwner();
@@ -92,5 +93,21 @@ void UTransporter::SetPoints(FVector Point1, FVector Point2)
 	StartPoint = Point1;
 	EndPoint = Point2;
 	ArePointsSet = true;
+}
+
+void UTransporter::SetMoveTime(float fMoveTime)
+{
+	if (fMoveTime < 0.f)
+	{
+		MoveTime = 0.f;
+		return;
+	}
+	
+	MoveTime = fMoveTime;
+}
+
+void UTransporter::SetOwnerIsTriggerActor(bool bOwnerIsTriggerActor)
+{
+	OwnerIsTriggerActor = bOwnerIsTriggerActor;
 }
 
