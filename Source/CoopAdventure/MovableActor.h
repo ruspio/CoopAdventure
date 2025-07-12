@@ -6,13 +6,13 @@
 #include "GameFramework/Actor.h"
 #include "MovableActor.generated.h"
 
+class UArrowComponent;
+class UTransporter;
+
 UCLASS()
 class COOPADVENTURE_API AMovableActor : public AActor
 {
 	GENERATED_BODY()
-
-class UArrowComponent;
-class UTransporter;
 	
 public:	
 	// Sets default values for this actor's properties
