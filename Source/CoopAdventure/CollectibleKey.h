@@ -17,19 +17,27 @@ public:
 	// Sets default values for this actor's properties
 	ACollectibleKey();
 
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	UCapsuleComponent* Capsule;
+	USceneComponent* RootComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	USceneComponent* RootComp;
+	UCapsuleComponent* Capsule;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Mesh;
+
+	UPROPERTY(ReplicatedUsing = OnRep_IsCollected, VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool IsCollected;
+
+	UFUNCTION(BlueprintCallable, meta = (AllowPrivateAccess = "true"))
+	void OnRep_IsCollected();
 
 public:	
 	// Called every frame
