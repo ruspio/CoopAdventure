@@ -73,7 +73,7 @@ void ACollectibleKey::Tick(float DeltaTime)
 
 	if (HasAuthority())
 	{
-		Mesh->AddRelativeRotation(FRotator(0.f, RotationSpeed*DeltaTime, 0.f));
+		Mesh->AddRelativeRotation(FRotator(0.f, RotationSpeed * DeltaTime, 0.f));
 
 		TArray<AActor*> OverlappingActors;		
 		Capsule->GetOverlappingActors(OverlappingActors, ACoopAdventureCharacter::StaticClass());
