@@ -40,6 +40,7 @@ void ACollectableKeyHolder::BeginPlay()
 void ACollectableKeyHolder::ActivateKeyMesh()
 {
 	KeyMesh->SetVisibility(true);
+	KeyMesh->SetCollisionProfileName(FName("BlockAllDynamic"));
 }
 
 // Called every frame

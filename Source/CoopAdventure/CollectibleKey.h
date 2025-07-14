@@ -8,6 +8,7 @@
 
 class UCapsuleComponent;
 class UAudioComponent;
+class ACollectableKeyHolder;
 
 UCLASS()
 class COOPADVENTURE_API ACollectibleKey : public AActor
@@ -36,6 +37,9 @@ private:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UAudioComponent* CollectAudio;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	ACollectableKeyHolder* KeyHolderRef;
 
 	UPROPERTY(ReplicatedUsing = OnRep_IsCollected, VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool IsCollected;
