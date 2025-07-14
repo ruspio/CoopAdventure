@@ -7,6 +7,7 @@
 #include "CollectibleKey.generated.h"
 
 class UCapsuleComponent;
+class UAudioComponent;
 
 UCLASS()
 class COOPADVENTURE_API ACollectibleKey : public AActor
@@ -32,9 +33,15 @@ private:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Mesh;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UAudioComponent* CollectAudio;
 
 	UPROPERTY(ReplicatedUsing = OnRep_IsCollected, VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool IsCollected;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float RotationSpeed;
 
 	UFUNCTION(BlueprintCallable, meta = (AllowPrivateAccess = "true"))
 	void OnRep_IsCollected();
