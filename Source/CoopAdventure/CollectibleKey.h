@@ -10,6 +10,8 @@ class UCapsuleComponent;
 class UAudioComponent;
 class ACollectableKeyHolder;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FCollectableKeyOnCollected);
+
 UCLASS()
 class COOPADVENTURE_API ACollectibleKey : public AActor
 {
@@ -53,5 +55,8 @@ private:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(BlueprintAssignable)
+	FCollectableKeyOnCollected OnCollected;
 
 };

@@ -58,6 +58,11 @@ void ACollectibleKey::OnRep_IsCollected()
 	if (HasAuthority())
 	{
 		UE_LOG(LogTemp, Display, TEXT("OnRep_IsCollected called from the server"));
+
+		if (IsCollected)
+		{		
+			OnCollected.Broadcast();
+		}
 	} else {
 		UE_LOG(LogTemp, Display, TEXT("OnRep_IsCollected called from the client"));
 	}
@@ -91,8 +96,8 @@ void ACollectibleKey::Tick(float DeltaTime)
 			{
 				IsCollected = true;
 				OnRep_IsCollected();
-			}			
-		}		
+			}
+		}
 	}	
 }
 

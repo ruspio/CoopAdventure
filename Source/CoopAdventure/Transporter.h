@@ -43,10 +43,10 @@ private:
 	bool AllTriggerActorsTriggered = false;
 	
 	UFUNCTION()
-	void OnPressurePlateActivated();
+	void OnTriggerActorActivated();
 	
 	UFUNCTION()
-	void OnPressurePlateDeactivated();
+	void OnTriggerActorDeactivated();
 
 public:	
 	// Called every frame
