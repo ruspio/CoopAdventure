@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "WinArea.generated.h"
 
+class UBoxComponent;
+
 UCLASS()
 class COOPADVENTURE_API AWinArea : public AActor
 {
@@ -18,6 +20,13 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UBoxComponent* WinAreaBox;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	bool WinCondition;
 
 public:	
 	// Called every frame
