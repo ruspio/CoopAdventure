@@ -28,6 +28,11 @@ void AWinArea::BeginPlay()
 	
 }
 
+void AWinArea::MulticastRPCWin_Implementation()
+{
+	OnWinCondition.Broadcast();
+}
+
 // Called every frame
 void AWinArea::Tick(float DeltaTime)
 {
@@ -44,6 +49,8 @@ void AWinArea::Tick(float DeltaTime)
 			if (WinCondition)
 			{
 				UE_LOG(LogTemp, Display, TEXT("Win!"));
+
+				MulticastRPCWin();
 			}
 		}
 	}

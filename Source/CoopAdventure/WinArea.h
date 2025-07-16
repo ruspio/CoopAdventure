@@ -8,6 +8,8 @@
 
 class UBoxComponent;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWinAreaOnWinCondition);
+
 UCLASS()
 class COOPADVENTURE_API AWinArea : public AActor
 {
@@ -28,8 +30,14 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	bool WinCondition;
 
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, meta = (AllowPrivateAccess = "true"))
+	void MulticastRPCWin();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(BlueprintAssignable)
+	FWinAreaOnWinCondition OnWinCondition;
 
 };
