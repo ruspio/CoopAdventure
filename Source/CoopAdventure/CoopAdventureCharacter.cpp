@@ -11,6 +11,10 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 
+#include "WinArea.h"
+#include "Kismet/GameplayStatics.h"
+#include "Blueprint/UserWidget.h"
+
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 //////////////////////////////////////////////////////////////////////////
@@ -52,6 +56,52 @@ ACoopAdventureCharacter::ACoopAdventureCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+}
+
+void ACoopAdventureCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (!IsLocallyControlled()) return;
+
+	// Znajdź WinArea w świecie
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(this, AWinArea::StaticClass(), FoundActors);
+
+	if (FoundActors.Num() > 0)
+	{
+		AWinArea* WinArea = Cast<AWinArea>(FoundActors[0]);
+		if (WinArea)
+		{
+			WinArea->OnWinCondition.AddDynamic(this, &ACoopAdventureCharacter::HandleGameWon);
+		}
+	}
+}
+
+void ACoopAdventureCharacter::HandleGameWon()
+{
+	if (!IsLocallyControlled()) return;
+
+	DisableInput(Cast<APlayerController>(GetController()));
+
+	if (WinScreenWidgetClass && !WinScreenInstance)
+	{
+		APlayerController* PC = Cast<APlayerController>(GetController());
+		if (!PC) return;
+
+		WinScreenInstance = CreateWidget<UUserWidget>(PC, WinScreenWidgetClass);
+		if (WinScreenInstance)
+		{
+			WinScreenInstance->AddToViewport();
+
+			FInputModeUIOnly InputMode;
+			InputMode.SetWidgetToFocus(WinScreenInstance->TakeWidget());
+			InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+
+			PC->SetInputMode(InputMode);
+			PC->bShowMouseCursor = true;
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////

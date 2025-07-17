@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "CoopAdventureGameMode.generated.h"
 
+
 UCLASS(minimalapi)
 class ACoopAdventureGameMode : public AGameModeBase
 {

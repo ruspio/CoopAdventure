@@ -5,13 +5,15 @@
 
 #include "Components/BoxComponent.h"
 #include "CoopAdventureCharacter.h"
+#include "CoopAdventureGameState.h"
 
 // Sets default values
 AWinArea::AWinArea()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	
+
+	bReplicates = true;
 	SetReplicates(true);
 	//SetReplicateMovement(true);
 
@@ -46,11 +48,29 @@ void AWinArea::Tick(float DeltaTime)
 			WinAreaBox->GetOverlappingActors(OverlappingActors, ACoopAdventureCharacter::StaticClass());
 
 			WinCondition = (OverlappingActors.Num() == 2);
+
+#if 0
 			if (WinCondition)
 			{
 				UE_LOG(LogTemp, Display, TEXT("Win!"));
 
 				MulticastRPCWin();
+			}
+
+#endif
+			if (WinCondition)
+			{
+				UE_LOG(LogTemp, Display, TEXT("Win!"));
+
+				if (ACoopAdventureGameState* GS = GetWorld()->GetGameState<ACoopAdventureGameState>())
+				{
+					GS->bGameWon = true;
+
+					if (GS->HasAuthority())
+					{
+						GS->OnRep_GameWon(); // Manual call for the server
+					}
+				}
 			}
 		}
 	}

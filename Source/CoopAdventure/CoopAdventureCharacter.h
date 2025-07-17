@@ -46,7 +46,11 @@ class ACoopAdventureCharacter : public ACharacter
 
 public:
 	ACoopAdventureCharacter();
-	
+
+	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void HandleGameWon();	
 
 protected:
 
@@ -55,6 +59,9 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+	
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UUserWidget> WinScreenWidgetClass;
 			
 
 protected:
@@ -63,10 +70,18 @@ protected:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+private:
+	UPROPERTY()
+	UUserWidget* WinScreenInstance;
+
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	TSubclassOf<UUserWidget> GetWinScreenWidgetClass() const { return WinScreenWidgetClass; }
+	UUserWidget* GetWinScreenInstance() const { return WinScreenInstance; }
+	void SetWinScreenInstance(UUserWidget* Widget) { WinScreenInstance = Widget; }
 };
 

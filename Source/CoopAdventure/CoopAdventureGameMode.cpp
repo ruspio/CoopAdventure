@@ -3,6 +3,7 @@
 #include "CoopAdventureGameMode.h"
 #include "CoopAdventureCharacter.h"
 #include "UObject/ConstructorHelpers.h"
+#include "CoopAdventureGameState.h"
 
 ACoopAdventureGameMode::ACoopAdventureGameMode()
 {
@@ -12,4 +13,6 @@ ACoopAdventureGameMode::ACoopAdventureGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+
+	GameStateClass = ACoopAdventureGameState::StaticClass();
 }
