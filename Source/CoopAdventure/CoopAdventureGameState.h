@@ -21,6 +21,11 @@ public:
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
+private:
+	FTimerHandle VictoryUITimerHandle;
+
+	void ShowVictoryUI();
+
 public:
 	UFUNCTION()
 	void OnRep_GameWon();
